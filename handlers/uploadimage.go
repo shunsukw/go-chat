@@ -12,6 +12,7 @@ import (
 	"github.com/shunsukw/go-chat/tasks"
 )
 
+// UploadImageForm ...
 type UploadImageForm struct {
 	PageTitle  string
 	FieldNames []string
@@ -19,6 +20,7 @@ type UploadImageForm struct {
 	Errors     map[string]string
 }
 
+// UploadImageHandler ...
 func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
 	u := UploadImageForm{}
 	u.Fields = make(map[string]string)
@@ -35,18 +37,17 @@ func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// GET--------------------
 // DisplayUploadImageForm ...
 func DisplayUploadImageForm(w http.ResponseWriter, r *http.Request, u *UploadImageForm) {
 	RenderGatedTemplate(w, "./templates/uploadimageform.html", u)
 }
 
-// POST
 // ValidateUploadImageForm ...
 func ValidateUploadImageForm(w http.ResponseWriter, r *http.Request, u *UploadImageForm) {
 	ProcessUploadImage(w, r, u)
 }
 
+// ProcessUploadImage ...
 func ProcessUploadImage(w http.ResponseWriter, r *http.Request, u *UploadImageForm) {
 	shouldProcessThumbnailAsynchronously := false
 

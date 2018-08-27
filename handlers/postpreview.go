@@ -93,13 +93,14 @@ func ValidatePostForm(w http.ResponseWriter, r *http.Request, p *PostForm) {
 	}
 }
 
+// PopulatePostFormFields ...
 func PopulatePostFormFields(r *http.Request, p *PostForm) {
 	for _, fieldName := range p.FieldNames {
 		p.Fields[fieldName] = r.FormValue(fieldName)
 	}
 }
 
-// After Validation
+// DisplayPostPreview --- After Validation
 func DisplayPostPreview(w http.ResponseWriter, r *http.Request, p *PostForm) {
 	moodState, _ := strconv.Atoi(p.Fields["mood"])
 	post := socialmedia.NewPost("Anonymous Gopher", socialmedia.MoodState(moodState), p.Fields["caption"], p.Fields["messageBody"], "", "", "", nil)
