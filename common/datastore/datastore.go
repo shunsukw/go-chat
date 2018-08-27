@@ -16,7 +16,7 @@ const (
 	REDIS
 )
 
-func NewDatabase(dbtype int, dbConnectionString string) (Datastore, error) {
+func NewDatastore(dbtype int, dbConnectionString string) (Datastore, error) {
 	switch dbtype {
 	case MYSQL:
 		return NewMySQLDatastore(dbConnectionString)
