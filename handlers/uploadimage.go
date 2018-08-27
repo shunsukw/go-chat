@@ -20,6 +20,11 @@ type UploadImageForm struct {
 }
 
 func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
+	u := UploadImageForm{}
+	u.Fields = make(map[string]string)
+	u.Errors = make(map[string]string)
+	u.PageTitle = "Upload Image"
+
 	switch r.Method {
 	case "GET":
 		DisplayUploadImageForm(w, r, &u)
@@ -59,7 +64,7 @@ func ProcessUploadImage(w http.ResponseWriter, r *http.Request, u *UploadImageFo
 
 		defer file.Close()
 
-		imageFilePathWithoutExtensions := "./static/uploads/images/" + randomFileName
+		imageFilePathWithoutExtension := "./static/uploads/images/" + randomFileName
 		f, err := os.OpenFile(imageFilePathWithoutExtension+extension, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			log.Println(err)
