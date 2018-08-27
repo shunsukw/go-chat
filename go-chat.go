@@ -41,6 +41,11 @@ func main() {
 	r.Handle("/find", http.HandlerFunc(handlers.FindHandler)).Methods("GET")
 	r.Handle("/profile", http.HandlerFunc(handlers.MyProfileHandler)).Methods("GET")
 	r.Handle("/profile/{username}", http.HandlerFunc(handlers.ProfileHandler)).Methods("GET")
+	r.Handle("/postpreview", http.HandlerFunc(handlers.PostPreviewHandler)).Methods("GET", "POST")
+	r.Handle("/upload_image", http.HandlerFunc(handlers.UploadImageHandler)).Methods("GET", "POST")
+	r.Handle("/upload_video", http.HandlerFunc(handlers.UploadVideoHandler)).Methods("GET", "POST")
+
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	loggedRouter := ghandlers.LoggingHandler(os.Stdout, r)
 	stdChain := alice.New(middleware.PanicRecoveryHandler)
