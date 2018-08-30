@@ -19,6 +19,8 @@ const (
 	WEBSERVERPORT = ":8443"
 )
 
+// TODO: middleware / slt / asyncq
+
 func main() {
 	db, err := datastore.NewDatastore(datastore.MYSQL, "gochat:gochat@/gochatdb")
 	//db, err := datastore.NewDatastore(datastore.MONGODB, "localhost:27017")

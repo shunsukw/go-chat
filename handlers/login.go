@@ -12,6 +12,7 @@ import (
 	"github.com/shunsukw/go-chat/validationkit"
 )
 
+// LoginForm ...
 type LoginForm struct {
 	PageTitle  string
 	FieldNames []string
@@ -19,6 +20,7 @@ type LoginForm struct {
 	Errors     map[string]string
 }
 
+// LoginHandler ...
 func LoginHandler(e *common.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		l := LoginForm{}

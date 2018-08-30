@@ -14,12 +14,12 @@ type SignupForm struct {
 	PageTitle  string
 	FieldNames []string
 	Fields     map[string]string
-	Erorrs     map[string]string
+	Errors     map[string]string
 }
 
 // SignupHandler ...
 func SignupHandler(env *common.Env) http.Handler {
-	return http.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		s := SignupForm{}
 		s.FieldNames = []string{"username", "firstName", "lastName", "email"}
 		s.Fields = make(map[string]string)
@@ -45,7 +45,7 @@ func DisplaySignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm) {
 // -------------------------------------------------
 
 // ValidateSignupForm ...
-func ValidateSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, env *common.Env) {
+func ValidateSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, e *common.Env) {
 	PopulateFormFields(r, s)
 
 	if r.FormValue("username") == "" {
@@ -72,7 +72,7 @@ func ValidateSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, e
 		s.Errors["confirmPasswordError"] = "The confirm password field is required."
 	}
 
-	if validationlit.CheckUsernameSyntax(r.FormValue("username")) == false {
+	if validationkit.CheckUsernameSyntax(r.FormValue("username")) == false {
 		usernameErrorMessage := "The username entered has an improper syntax."
 		if _, ok := s.Errors["usernameError"]; ok {
 			s.Errors["usernameError"] += " " + usernameErrorMessage
@@ -95,21 +95,23 @@ func ValidateSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, e
 	}
 
 	if len(s.Errors) > 0 {
-		DisplaySignUpForm(w, r, s)
+		DisplaySignupForm(w, r, s)
 	} else {
-		ProcessSignUpForm(w, r, s, e)
+		ProcessSignupForm(w, r, s, e)
 	}
 }
 
+// PopulateFormFields ...
 func PopulateFormFields(r *http.Request, s *SignupForm) {
 	for _, fieldname := range s.FieldNames {
 		s.Fields[fieldname] = r.FormValue(fieldname)
 	}
 }
 
+// ProcessSignupForm ...
 func ProcessSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, env *common.Env) {
 	u := models.NewUser(r.FormValue("username"), r.FormValue("firstName"), r.FormValue("lastName"), r.FormValue("email"), r.FormValue("password"))
-	err := env.DB.CreateUser(&u)
+	err := env.DB.CreateUser(u)
 	if err != nil {
 		log.Print(err)
 	}
@@ -120,7 +122,7 @@ func ProcessSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, en
 
 // --------------------------------------------------
 
-// DisplayComfirmation ...
-func DisplayConfirmation(w http.ResponseWriter, r *http.Request, s *SignUpForm) {
+// DisplayConfirmation ...
+func DisplayConfirmation(w http.ResponseWriter, r *http.Request, s *SignupForm) {
 	RenderTemplate(w, "./templates/signupconfirmation.html", s)
 }

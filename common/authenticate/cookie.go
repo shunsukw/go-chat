@@ -39,6 +39,20 @@ func CreateSecureCookie(u *models.User, sessionID string, w http.ResponseWriter,
 	return nil
 }
 
+// ReadSecureCookieValues ...
+func ReadSecureCookieValues(w http.ResponseWriter, r *http.Request) (map[string]string, error) {
+	if cookie, err := r.Cookie("session"); err != nil {
+		value := make(map[string]string)
+		if err = s.Decode("session", cookie.Value, &value); err == nil {
+			return value, nil
+		} else {
+			return nil, err
+		}
+	} else {
+		return nil, nil
+	}
+}
+
 // ExpireSecureCookie ...
 func ExpireSecureCookie(w http.ResponseWriter, r *http.Request) {
 	cookie := &http.Cookie{
