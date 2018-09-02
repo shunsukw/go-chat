@@ -3,6 +3,8 @@ package datastore
 import (
 	"database/sql"
 
+	"github.com/shunsukw/go-chat/models/socialmedia"
+
 	"github.com/shunsukw/go-chat/models"
 
 	"log"
@@ -76,4 +78,29 @@ func (m *MySQLDatastore) GetUser(username string) (*models.User, error) {
 // Close ...
 func (m *MySQLDatastore) Close() {
 	m.Close()
+}
+
+func (m *MySQLDatastore) FetchPosts(owner string) ([]socialmedia.Post, error) {
+	posts := make([]socialmedia.Post, 0)
+	stmt, err := m.Prepare("select p.uuid, p.title, p.body, p.mood, UNIX_TIMESTAMP(p.created_ts), UNIX_TIMESTAMP(p.updated_ts), up.profile_image_path, u.username from post p, user u, user_profile up where p.uuid = u.uuid and p.uuid = up.uuid and (p.uuid = ? or p.uuid in (select friend_uuid from friend_relation where owner_uuid=?) ) order by p.created_ts desc")
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.Query(owner, owner)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		p := socialmedia.Post{}
+		err := rows.Scan(&p.UUID, &p.Caption, &p.MessageBody, &p.RawMoodValue, &p.TimeCreatedUnixTS, &p.TimeModifiedUnixTS, &p.ProfileImagePath, &p.Username)
+		if err != nil {
+			return nil, err
+		}
+
+		return posts, nil
+	}
 }

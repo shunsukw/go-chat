@@ -2,29 +2,41 @@ package datastore
 
 import (
 	"github.com/shunsukw/go-chat/models"
+	"github.com/shunsukw/go-chat/models/socialmedia"
 )
 
 type Datastore interface {
 	CreateUser(user *models.User) error
 	GetUser(username string) (*models.User, error)
 	Close()
+	GetUserProfile(uuid string) (*models.UserProfile, error)
+	UpdateUserProfile(uuid, about, location, interests string) error
+	UpdateUserProfileImage(uuid, profileImagePath string) error
+	FindGophers(owner string, searchTerm string) ([]models.Gopher, error)
+	FriendsList(owner string) ([]models.Gopher, error)
+	FollowGopher(owner string, friend string) error
+	UnfollowGopher(owner string, friend string) error
+	SavePost(owner string, title string, body string, mood int) error
+	FetchPosts(owner string) ([]socialmedia.Post, error) // done
+	GetGopherProfile(username string) (*models.UserProfile, error)
 }
 
 const (
 	MYSQL = iota
-	MONGODB
-	REDIS
+	// MONGODB
+	// REDIS
 )
 
 func NewDatastore(dbtype int, dbConnectionString string) (Datastore, error) {
 	switch dbtype {
 	case MYSQL:
 		return NewMySQLDatastore(dbConnectionString)
-	case MONGODB:
-		return NewMongoDBDatastore(dbConnectionString)
-	case REDIS:
-		return NewRedisDatastore(dbConnectionString)
-
+		/*
+			case MONGODB:
+				return NewMongoDBDatastore(dbConnectionString)
+			case REDIS:
+				return NewRedisDatastore(dbConnectionString)
+		*/
 	}
 
 	return nil, nil

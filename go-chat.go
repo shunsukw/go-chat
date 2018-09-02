@@ -19,6 +19,8 @@ const (
 	WEBSERVERPORT = ":8443"
 )
 
+var WEBAPPROOT = os.Getenv("GOPHERFACE_APP_ROOT")
+
 // TODO: slt / asyncq
 
 func main() {
@@ -30,7 +32,13 @@ func main() {
 	}
 	defer db.Close()
 
-	env := common.Env{DB: db}
+	env := common.Env{}
+	isokit.TemplateFilesPath = WebAppRoot + "/templates"
+	isokit.TemplateFileExtension = ".html"
+	ts := isokit.NewTemplateSet()
+	ts.GatherTemplates()
+	env.TemplateSet = ts
+	env.DB = db
 
 	r := mux.NewRouter()
 
@@ -43,12 +51,14 @@ func main() {
 	// routes
 	r.Handle("/feed", middleware.GatedContentHandler(handlers.FeedHandler)).Methods("GET")
 	r.Handle("/friends", middleware.GatedContentHandler(handlers.FriendsHandler)).Methods("GET,POST")
-	r.Handle("/find", middleware.GatedContentHandler(handlers.FindHandler)).Methods("GET")
-	r.Handle("/profile", middleware.GatedContentHandler(handlers.MyProfileHandler)).Methods("GET")
+	r.Handle("/myprofile", middleware.GatedContentHandler(handlers.MyProfileHandler)).Methods("GET")
 	r.Handle("/profile/{username}", middleware.GatedContentHandler(handlers.ProfileHandler)).Methods("GET")
-	r.Handle("/postpreview", middleware.GatedContentHandler(handlers.PostPreviewHandler)).Methods("GET", "POST")
-	r.Handle("/upload-image", middleware.GatedContentHandler(handlers.UploadImageHandler)).Methods("GET", "POST")
-	r.Handle("/upload-video", middleware.GatedContentHandler(handlers.UploadVideoHandler)).Methods("GET", "POST")
+
+	// REST API endpoints
+
+	r.Handle("/js/client.js", isokit.GopherjsScriptHandler(WebAppRoot))
+	r.Handle("/js/client.js.map", isokit.GopherjsScriptMapHandler(WebAppRoot))
+	r.Handle("/template-bundle", handlers.TemplateBundleHandler(&env))
 
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
