@@ -10,8 +10,8 @@ import (
 	"github.com/shunsukw/go-chat/common/authenticate"
 )
 
-// FindGophers ...
-func FindGophers(env *common.Env) http.Handler {
+// FindGophersEndpoint ...
+func FindGophersEndpoint(env *common.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gsSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {

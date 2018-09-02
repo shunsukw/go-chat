@@ -8,10 +8,11 @@ import (
 
 	"github.com/shunsukw/go-chat/common"
 	"github.com/shunsukw/go-chat/common/authenticate"
+	"github.com/shunsukw/go-chat/models/socialmedia"
 )
 
-// FollowGopherEndpoint ...
-func FollowGopherEndpoint(env *common.Env) http.HandlerFunc {
+// SavePostEndpoint ...
+func SavePostEndpoint(env *common.Env) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gfSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
@@ -20,24 +21,20 @@ func FollowGopherEndpoint(env *common.Env) http.HandlerFunc {
 		}
 		uuid := gfSession.Values["uuid"].(string)
 
-		var gopherUUID string
 		reqBody, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Print("Encountered error when attempting to read the request body: ", err)
 		}
 
-		err = json.Unmarshal(reqBody, &gopherUUID)
-		if err != nil {
-			log.Print("Encountered error when attempting to unmarshal JSON: ", err)
-		}
+		var p socialmedia.Post
+		json.Unmarshal(reqBody, &p)
 
-		err = env.DB.FollowGopher(uuid, gopherUUID)
+		err = env.DB.SavePost(uuid, p.Caption, p.MessageBody, p.RawMoodValue)
 
 		if err != nil {
-			log.Print(err)
+			w.Write([]byte("ERROR: Failed to save post!"))
+		} else {
+			w.Write([]byte("Post saved successfully!"))
 		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(err)
 	})
 }

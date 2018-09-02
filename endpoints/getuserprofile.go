@@ -9,9 +9,9 @@ import (
 	"github.com/shunsukw/go-chat/common/authenticate"
 )
 
-// FetchPostEndpoint ...
-func FetchPostEndpoint(env *common.Env) http.HandleFunc {
-	return http.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
+// GetUserProfileEndpoint ...
+func GetUserProfileEndpoint(env *common.Env) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gsSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
 			log.Print(err)
@@ -19,14 +19,14 @@ func FetchPostEndpoint(env *common.Env) http.HandleFunc {
 		}
 
 		uuid := gsSession.Values["uuid"].(string)
-
-		posts, err := env.DB.FetchPosts(uuid)
+		u, err := env.DB.GetUserProfile(uuid)
 		if err != nil {
-			// Error 処理
 			log.Print(err)
 		}
 
+		u.Username = gfSession.Values["username"].(string)
+
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(posts)
+		json.NewEncoder(w).Encode(u)
 	})
 }

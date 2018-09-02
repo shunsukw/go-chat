@@ -6,13 +6,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/shunsukw/go-chat/common"
 	"github.com/shunsukw/go-chat/common/authenticate"
+
+	"github.com/shunsukw/go-chat/common"
 )
 
-// FollowGopherEndpoint ...
-func FollowGopherEndpoint(env *common.Env) http.HandlerFunc {
+// UnfollowGopherEndpoint ...
+func UnfollowGopherEndpoint(env *common.Env) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 		gfSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
 			log.Print(err)
@@ -25,13 +27,12 @@ func FollowGopherEndpoint(env *common.Env) http.HandlerFunc {
 		if err != nil {
 			log.Print("Encountered error when attempting to read the request body: ", err)
 		}
-
 		err = json.Unmarshal(reqBody, &gopherUUID)
 		if err != nil {
 			log.Print("Encountered error when attempting to unmarshal JSON: ", err)
 		}
 
-		err = env.DB.FollowGopher(uuid, gopherUUID)
+		err = env.DB.UnfollowGopher(uuid, gopherUUID)
 
 		if err != nil {
 			log.Print(err)
@@ -39,5 +40,6 @@ func FollowGopherEndpoint(env *common.Env) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(err)
+
 	})
 }

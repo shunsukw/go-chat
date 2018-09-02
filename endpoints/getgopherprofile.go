@@ -9,8 +9,8 @@ import (
 	"github.com/shunsukw/go-chat/common"
 )
 
-// GetGopherProfile ...
-func GetGopherProfile(env *common.Env) http.HandlerFunc {
+// GetGopherProfileEndpoint ...
+func GetGopherProfileEndpoint(env *common.Env) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var gopherUUID string
 		reqBody, err := ioutil.ReadAll(r.Body)
