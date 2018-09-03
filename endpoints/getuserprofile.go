@@ -12,13 +12,13 @@ import (
 // GetUserProfileEndpoint ...
 func GetUserProfileEndpoint(env *common.Env) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gsSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
+		gfSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
 			log.Print(err)
 			return
 		}
 
-		uuid := gsSession.Values["uuid"].(string)
+		uuid := gfSession.Values["uuid"].(string)
 		u, err := env.DB.GetUserProfile(uuid)
 		if err != nil {
 			log.Print(err)

@@ -9,9 +9,9 @@ import (
 	"github.com/shunsukw/go-chat/common/authenticate"
 )
 
-// FetchPostEndpoint ...
-func FetchPostEndpoint(env *common.Env) http.HandleFunc {
-	return http.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
+// FetchPostsEndpoint ...
+func FetchPostsEndpoint(env *common.Env) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gsSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
 			log.Print(err)

@@ -5,9 +5,13 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/shunsukw/go-chat/common"
 	"github.com/shunsukw/go-chat/common/authenticate"
+	"github.com/shunsukw/go-chat/common/utility"
+	"github.com/shunsukw/go-chat/tasks"
 )
 
 // SaveUserProfileImageEndpoint ...

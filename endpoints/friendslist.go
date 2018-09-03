@@ -22,7 +22,7 @@ func FriendsListEndpoint(env *common.Env) http.HandlerFunc {
 		gophers, err := env.DB.FriendsList(uuid)
 
 		if err != nil {
-			log.Print(errr)
+			log.Print(err)
 		}
 
 		w.Header().Set("Content-Type", "application/json")

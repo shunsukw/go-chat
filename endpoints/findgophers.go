@@ -11,7 +11,7 @@ import (
 )
 
 // FindGophersEndpoint ...
-func FindGophersEndpoint(env *common.Env) http.Handler {
+func FindGophersEndpoint(env *common.Env) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gsSession, err := authenticate.SessionStore.Get(r, "gopherface-session")
 		if err != nil {
@@ -27,12 +27,12 @@ func FindGophersEndpoint(env *common.Env) http.Handler {
 			log.Print("Encountered error when attempting to read the request body: ", err)
 		}
 
-		err := json.Unmarshal(reqBody, &serchTerm)
+		err = json.Unmarshal(reqBody, &serchTerm)
 		if err != nil {
 			log.Print("Encountered error when attempting to unmarshal JSON: ", err)
 		}
 
-		gophers, err := env.DB.FindGophers(uuid, searchTerm)
+		gophers, err := env.DB.FindGophers(uuid, serchTerm)
 
 		if err != nil {
 			log.Print(err)

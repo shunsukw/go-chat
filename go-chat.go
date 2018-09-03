@@ -10,6 +10,7 @@ import (
 	"github.com/justinas/alice"
 	"github.com/shunsukw/go-chat/common"
 	"github.com/shunsukw/go-chat/common/datastore"
+	"github.com/shunsukw/go-chat/endpoints"
 	"github.com/shunsukw/go-chat/handlers"
 	"github.com/shunsukw/go-chat/middleware"
 
@@ -50,13 +51,17 @@ func main() {
 	r.Handle("/login", handlers.LoginHandler(&env)).Methods("GET", "POST")
 	r.HandleFunc("/logut", handlers.LogoutHandler).Methods("GET", "POST")
 
-	// routes
-	r.Handle("/feed", middleware.GatedContentHandler(handlers.FeedHandler)).Methods("GET")
-	r.Handle("/friends", middleware.GatedContentHandler(handlers.FriendsHandler)).Methods("GET,POST")
-	r.Handle("/myprofile", middleware.GatedContentHandler(handlers.MyProfileHandler)).Methods("GET")
-	r.Handle("/profile/{username}", middleware.GatedContentHandler(handlers.ProfileHandler)).Methods("GET")
-
-	// REST API endpoints
+	// routes	// REST API endpoints
+	r.Handle("/restapi/get-user-profile", middleware.GatedContentHandler(endpoints.GetUserProfileEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/save-user-profile", middleware.GatedContentHandler(endpoints.SaveUserProfileEndpoint(&env))).Methods("POST")
+	r.Handle("/restapi/save-user-profile-image", middleware.GatedContentHandler(endpoints.SaveUserProfileImageEndpoint(&env))).Methods("POST")
+	r.Handle("/restapi/find-gophers", middleware.GatedContentHandler(endpoints.FindGophersEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/follow-gopher", middleware.GatedContentHandler(endpoints.FollowGopherEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/unfollow-gopher", middleware.GatedContentHandler(endpoints.UnfollowGopherEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/get-friends-list", middleware.GatedContentHandler(endpoints.FriendsListEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/save-post", middleware.GatedContentHandler(endpoints.SavePostEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/fetch-posts", middleware.GatedContentHandler(endpoints.FetchPostsEndpoint(&env))).Methods("GET", "POST")
+	r.Handle("/restapi/get-gopher-profile", middleware.GatedContentHandler(endpoints.GetGopherProfileEndpoint(&env))).Methods("GET", "POST")
 
 	r.Handle("/js/client.js", isokit.GopherjsScriptHandler(WEBAPPROOT))
 	r.Handle("/js/client.js.map", isokit.GopherjsScriptMapHandler(WEBAPPROOT))
