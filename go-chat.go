@@ -12,6 +12,8 @@ import (
 	"github.com/shunsukw/go-chat/common/datastore"
 	"github.com/shunsukw/go-chat/handlers"
 	"github.com/shunsukw/go-chat/middleware"
+
+	"go.isomorphicgo.org/go/isokit"
 )
 
 const (
@@ -19,12 +21,12 @@ const (
 	WEBSERVERPORT = ":8443"
 )
 
-var WEBAPPROOT = os.Getenv("GOPHERFACE_APP_ROOT")
+var WEBAPPROOT = "/Users/Shunsuke/dev/src/github.com/shunsukw/go-chat"
 
 // TODO: slt / asyncq
 
 func main() {
-	db, err := datastore.NewDatastore(datastore.MYSQL, "gochat:gochat@/gochatdb")
+	db, err := datastore.NewDatastore(datastore.MYSQL, "gopherface:gopherface@/gopherfacedb")
 	//db, err := datastore.NewDatastore(datastore.MONGODB, "localhost:27017")
 	//db, err := datastore.NewDatastore(datastore.REDIS, "localhost:6379")
 	if err != nil {
@@ -33,7 +35,7 @@ func main() {
 	defer db.Close()
 
 	env := common.Env{}
-	isokit.TemplateFilesPath = WebAppRoot + "/templates"
+	isokit.TemplateFilesPath = WEBAPPROOT + "/templates"
 	isokit.TemplateFileExtension = ".html"
 	ts := isokit.NewTemplateSet()
 	ts.GatherTemplates()
@@ -44,7 +46,7 @@ func main() {
 
 	r.HandleFunc("/", handlers.HomeHandler)
 	// Signin Login
-	r.Handle("/signin", handlers.SignupHandler(&env)).Methods("GET", "POST")
+	r.Handle("/signup", handlers.SignupHandler(&env)).Methods("GET", "POST")
 	r.Handle("/login", handlers.LoginHandler(&env)).Methods("GET", "POST")
 	r.HandleFunc("/logut", handlers.LogoutHandler).Methods("GET", "POST")
 
@@ -56,8 +58,8 @@ func main() {
 
 	// REST API endpoints
 
-	r.Handle("/js/client.js", isokit.GopherjsScriptHandler(WebAppRoot))
-	r.Handle("/js/client.js.map", isokit.GopherjsScriptMapHandler(WebAppRoot))
+	r.Handle("/js/client.js", isokit.GopherjsScriptHandler(WEBAPPROOT))
+	r.Handle("/js/client.js.map", isokit.GopherjsScriptMapHandler(WEBAPPROOT))
 	r.Handle("/template-bundle", handlers.TemplateBundleHandler(&env))
 
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))

@@ -16,7 +16,7 @@ import (
 	"github.com/shunsukw/go-chat/client/common"
 	"github.com/shunsukw/go-chat/forms"
 
-	"github.com/isomorphicgo/isokit"
+	"go.isomorphicgo.org/go/isokit"
 )
 
 var postForm *forms.SocialMediaPostForm

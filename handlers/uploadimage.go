@@ -39,7 +39,7 @@ func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
 
 // DisplayUploadImageForm ...
 func DisplayUploadImageForm(w http.ResponseWriter, r *http.Request, u *UploadImageForm) {
-	RenderGatedTemplate(w, "./templates/uploadimageform.html", u)
+	RenderGatedTemplate(w, WebAppRoot+"/templates/uploadimageform.html", u)
 }
 
 // ValidateUploadImageForm ...
@@ -91,7 +91,7 @@ func ProcessUploadImage(w http.ResponseWriter, r *http.Request, u *UploadImageFo
 		m["imagePath"] = strings.TrimPrefix(imageFilePathWithoutExtension, ".") + ".png"
 		m["PageTitle"] = "Image Preview"
 
-		RenderGatedTemplate(w, "./templates/imagepreview.html", m)
+		RenderGatedTemplate(w, WebAppRoot+"/templates/imagepreview.html", m)
 	} else {
 		w.Write([]byte("Failed to process uploaded file!"))
 	}

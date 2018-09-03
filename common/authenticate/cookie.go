@@ -3,7 +3,6 @@ package authenticate
 import (
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/securecookie"
@@ -72,8 +71,8 @@ func ExpireSecureCookie(w http.ResponseWriter, r *http.Request) {
 
 func init() {
 
-	hashKey = []byte(os.Getenv("GOPHERFACE_HASH_KEY"))
-	blockKey = []byte(os.Getenv("GOPHERFACE_BLOCK_KEY"))
+	hashKey = []byte("CRKVBJs0kfyeQ9Y1")
+	blockKey = []byte("9LtmRLzVH27Cwxr0")
 
 	s = securecookie.New(hashKey, blockKey)
 }

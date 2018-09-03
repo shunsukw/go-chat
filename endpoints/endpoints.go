@@ -1,8 +1,4 @@
 package endpoints
 
-import (
-	"os"
-)
-
 // WebAppRoot ...
-var WebAppRoot = os.Getenv("GOPHERFACE_APP_ROOT")
+var WebAppRoot = "~/dev/src/github.com/shunsukw/go-chat"

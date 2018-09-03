@@ -13,7 +13,7 @@ import (
 	"github.com/shunsukw/go-chat/forms"
 	"github.com/shunsukw/go-chat/models"
 
-	"github.com/isomorphicgo/isokit"
+	"go.isomorphicgo.org/go/isokit"
 )
 
 var myProfileForm *forms.MyProfileForm

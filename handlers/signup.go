@@ -39,7 +39,7 @@ func SignupHandler(env *common.Env) http.Handler {
 
 // DisplaySignupForm ...
 func DisplaySignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm) {
-	RenderTemplate(w, "./templates/signupform.html", s)
+	RenderTemplate(w, WebAppRoot+"/templates/signupform.html", s)
 }
 
 // -------------------------------------------------
@@ -124,5 +124,5 @@ func ProcessSignupForm(w http.ResponseWriter, r *http.Request, s *SignupForm, en
 
 // DisplayConfirmation ...
 func DisplayConfirmation(w http.ResponseWriter, r *http.Request, s *SignupForm) {
-	RenderTemplate(w, "./templates/signupconfirmation.html", s)
+	RenderTemplate(w, WebAppRoot+"/templates/signupconfirmation.html", s)
 }

@@ -42,7 +42,7 @@ func LoginHandler(e *common.Env) http.Handler {
 
 // DisplayLoginForm ...
 func DisplayLoginForm(w http.ResponseWriter, r *http.Request, l *LoginForm) {
-	RenderTemplate(w, "./templates/loginform.html", l)
+	RenderTemplate(w, WebAppRoot+"/templates/loginform.html", l)
 }
 
 // -------------------------------------

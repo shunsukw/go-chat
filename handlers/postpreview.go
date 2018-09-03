@@ -70,7 +70,7 @@ func PostPreviewHandler(w http.ResponseWriter, r *http.Request) {
 
 // DisplayPostForm ------------
 func DisplayPostForm(w http.ResponseWriter, r *http.Request, p *PostForm) {
-	RenderTemplate(w, "./templates/postform.html", p)
+	RenderTemplate(w, WebAppRoot+"/templates/postform.html", p)
 }
 
 // ValidatePostForm ------------
@@ -104,5 +104,5 @@ func PopulatePostFormFields(r *http.Request, p *PostForm) {
 func DisplayPostPreview(w http.ResponseWriter, r *http.Request, p *PostForm) {
 	moodState, _ := strconv.Atoi(p.Fields["mood"])
 	post := socialmedia.NewPost("Anonymous Gopher", socialmedia.MoodState(moodState), p.Fields["caption"], p.Fields["messageBody"], "", "", "", nil)
-	RenderTemplate(w, "./templates/socialmediapost.html", post)
+	RenderTemplate(w, WebAppRoot+"/templates/postform.html", post)
 }

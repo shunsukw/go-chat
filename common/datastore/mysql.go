@@ -333,6 +333,7 @@ func (m *MySQLDatastore) FetchPosts(owner string) ([]socialmedia.Post, error) {
 			return nil, err
 		}
 
-		return posts, nil
 	}
+
+	return posts, nil
 }

@@ -38,7 +38,7 @@ func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 
 // DisplayUploadVideoForm ...
 func DisplayUploadVideoForm(w http.ResponseWriter, r *http.Request, u *UploadVideoForm) {
-	RenderGatedTemplate(w, "./templates/uploadimageform.html", u)
+	RenderTemplate(w, WebAppRoot+"/templates/uploadvideoform.html", u)
 }
 
 // ValidateUploadVideoForm ...
@@ -86,8 +86,7 @@ func ProcessUploadVideo(w http.ResponseWriter, r *http.Request, u *UploadVideoFo
 		m := make(map[string]string)
 		m["thumbnailPath"] = strings.TrimPrefix(videoFilePathWithoutExtension, ".") + "_thumb.png"
 		m["videoPath"] = strings.TrimPrefix(videoFilePathWithoutExtension, ".") + ".mp4"
-
-		RenderTemplate(w, "./templates/videopreview.html", m)
+		RenderTemplate(w, WebAppRoot+"/templates/videopreview.html", m)
 	} else {
 		w.Write([]byte("Failed to process uploaded file!"))
 	}

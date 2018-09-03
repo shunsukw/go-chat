@@ -3,7 +3,6 @@ package authenticate
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/sessions"
 	"github.com/shunsukw/go-chat/models"
@@ -47,5 +46,5 @@ func ExpireUserSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	SessionStore = sessions.NewFilesystemStore("/tmp/gopherface-sessions", []byte(os.Getenv("GOPHERFACE_HASH_KEY")))
+	SessionStore = sessions.NewFilesystemStore("/tmp/gopherface-sessions", []byte("CRKVBJs0kfyeQ9Y1"))
 }
